@@ -31,6 +31,10 @@ TARGET   = QGroundControl
 TEMPLATE = app
 QGCROOT  = $$PWD
 
+QMAKE_CXXFLAGS_WARN_ON -= /WX
+# removing the warings
+
+
 QML_IMPORT_PATH += $$PWD/src/QmlControls
 
 #

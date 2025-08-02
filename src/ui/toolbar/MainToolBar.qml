@@ -31,7 +31,7 @@ Rectangle {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
-    property color  _mainStatusBGColor: qgcPal.brandingPurple
+    property color  _mainStatusBGColor: qgcPal.brandingYellow
 
     QGCPalette { id: qgcPal }
 
@@ -216,4 +216,142 @@ Rectangle {
             onClicked:      largeProgressBar._userHide = true
         }
     }
-}
+    // QGCButton {
+    //     id: customStatusButton
+    //     text: "Vehicle Status"
+    //     anchors.top: parent.top
+    //     anchors.right: parent.right
+    //     anchors.margins: 10
+    //     height: 50
+    //     onClicked: {
+    //         missionControlDialog.visible = true
+    //     }
+    // }
+
+    // QGCPopupDialog {
+    //     id: missionControlDialog
+    //     title: "Mission Control"
+    //     anchors.right: parent.right
+    //     width: 700
+    //     height: 500
+    //     visible: false    // Start hidden
+
+    //     Rectangle {
+    //         anchors.fill: parent
+    //         color: "#000000"
+    //         anchors.topMargin: 70
+    //         // anchors.rightMargin: 10
+    //         // anchors.bottom: parent.bottom
+
+    //         QGCButton {
+    //             text: "Close"
+    //             anchors.bottom: parent.bottom
+    //             anchors.right: parent.right
+    //             anchors.margins: 10
+    //             // background.color: "white"  // Set button background to white
+    //             onClicked: {
+    //                 missionControlDialog.visible = false
+    //             }
+    //         }
+    //     }
+    // }
+    QGCButton {
+        id: customStatusButton
+        text: "Vehicle Status"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        height: 50
+        onClicked: {
+            missionControlDialog.visible = true
+        }
+    }
+
+    QGCPopupDialog {
+        id: missionControlDialog
+        title: "Mission Control"
+        anchors.right: parent.right
+        width: 700
+        height: 500
+        visible: false    // Start hidden
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#000000"
+            anchors.topMargin: 70
+
+            Column {
+                anchors.fill: parent
+                anchors.margins: 24
+                spacing: 24
+
+                // Use QGroundControl's API to check for connection and display data
+                // QGroundControl.multiVehicleManager.activeVehicle is the "active" vehicle or undefined/null if no vehicle.
+                // Defensive coding included to display a message when disconnected.
+                Component.onCompleted: {} // Needed in some QGC contexts; safe to leave empty here.
+
+                QGCLabel {
+                    color: "white"
+                    text: QGroundControl.multiVehicleManager.activeVehicle
+                        ? "Mode: " + QGroundControl.multiVehicleManager.activeVehicle.flightMode
+                        : "No vehicle connection"
+                    font.pixelSize: 22
+                }
+                QGCLabel {
+                    color: "white"
+                    visible: QGroundControl.multiVehicleManager.activeVehicle !== null
+                    text: QGroundControl.multiVehicleManager.activeVehicle
+                        ? "GPS: " +
+                            QGroundControl.multiVehicleManager.activeVehicle.gps.lat.toFixed(7)
+                            + ", " +
+                            QGroundControl.multiVehicleManager.activeVehicle.gps.lon.toFixed(7)
+                        : ""
+                    font.pixelSize: 22
+                }
+                QGCLabel {
+                    color: "white"
+                    visible: QGroundControl.multiVehicleManager.activeVehicle !== null
+                    text: QGroundControl.multiVehicleManager.activeVehicle
+                        && QGroundControl.multiVehicleManager.activeVehicle.battery.percentRemaining !== undefined
+                        ? "Battery: " +
+                            QGroundControl.multiVehicleManager.activeVehicle.battery.percentRemaining + "%"
+                        : ""
+                    font.pixelSize: 22
+                }
+            }
+
+            // Custom Close "button" with white background, bottom-right
+            Rectangle {
+                width: 100
+                height: 40
+                color: "white"
+                radius: 6
+                border.color: "#aaaaaa"
+                border.width: 1
+
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 10
+
+                QGCLabel {
+                    anchors.centerIn: parent
+                    text: "Close"
+                    color: "black"
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        missionControlDialog.visible = false
+                    }
+                }
+            }
+        }
+    }
+
+    }
+
+
+

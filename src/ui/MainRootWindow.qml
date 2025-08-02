@@ -733,4 +733,125 @@ ApplicationWindow {
             indicatorPopup.currentIndicator = null
         }
     }
+    property bool loggedIn: false
+    property string userRole: ""
+
+
+    // QGCPopupDialog {
+    //     id: loginDialog
+    //     // modal: true
+    //     width: 400
+    //     height: 300
+    //     title: "Login Required"
+    //     anchors.centerIn: parent
+
+    //     Rectangle {
+    //         anchors.fill: parent
+    //         color: "#1e1e1e"
+    //         radius: 10
+
+    //         Column {
+    //             anchors.centerIn: parent
+    //             spacing: 15
+
+    //             QGCLabel {
+    //                 text: "Username"
+    //             }
+
+    //             QGCTextField {
+    //                 id: usernameField
+    //                 width: 200
+    //             }
+
+    //             QGCLabel {
+    //                 text: "Password"
+    //             }
+
+    //             QGCTextField {
+    //                 id: passwordField
+    //                 width: 200
+    //                 echoMode: TextInput.Password
+    //             }
+
+    //             QGCButton {
+    //                 text: "Login"
+    //                 onClicked: {
+    //                     if (usernameField.text === "engineer" && passwordField.text === "1234") {
+    //                         loginDialog.visible = false
+    //                         loggedIn = true
+    //                         userRole = "Engineer"
+    //                     } else if (usernameField.text === "customer" && passwordField.text === "1234") {
+    //                         loginDialog.visible = false
+    //                         loggedIn = true
+    //                         userRole = "Customer"
+    //                     } else {
+    //                         console.log("Login failed")
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+        // Rectangle {
+        //     id: loginPage
+        //     width: 400
+        //     height: 250
+        //     color: "#2E2E2E"
+        //     radius: 10
+
+        //     property alias username: usernameField.text
+        //     property alias password: passwordField.text
+
+        //     signal loginClicked()
+
+        //     ColumnLayout {
+        //         anchors.fill: parent
+        //         anchors.margins: 20
+
+        //         Label {
+        //             text: "QGC Login"
+        //             font.pixelSize: 24
+        //             font.bold: true
+        //             color: "white"
+        //             Layout.alignment: Qt.AlignHCenter
+        //         }
+
+        //         TextField {
+        //             id: usernameField
+        //             placeholderText: "Username"
+        //             Layout.fillWidth: true
+        //             background: Rectangle {
+        //                 color: "#555"
+        //                 radius: 5
+        //             }
+        //             color: "white"
+        //         }
+
+        //         TextField {
+        //             id: passwordField
+        //             placeholderText: "Password"
+        //             echoMode: TextInput.Password
+        //             Layout.fillWidth: true
+        //             background: Rectangle {
+        //                 color: "#555"
+        //                 radius: 5
+        //             }
+        //             color: "white"
+        //         }
+
+        //         Button {
+        //             text: "Login"
+        //             Layout.fillWidth: true
+        //             onClicked: loginPage.loginClicked()
+        //         }
+        //     }
+        // }
+
+
+
+
+
+
+
+
 }
