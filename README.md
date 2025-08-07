@@ -32,7 +32,7 @@ Feel free to contribute or explore the source code to extend this customized GCS
 
 Key Links:
 * [Website](http://indrones.com) (indrones.com)
-* [Custom User Manual](https://docs.google.com/document/d/1_ipRAkgV0zoKAxUKI69aawjVpmPPTQdNOBWRNjTQ8fw/edit?tab=t.0#heading=h.m2pbg7tifcuv)
+* [Custom User Manual](https://docs.google.com/document/d/1e2_xGAvfSnsF4zPajzsl4Ara4wakNxDuoX2wSu4Jn4s/edit?tab=t.0)
 * [User Manual](https://docs.qgroundcontrol.com/en/)
 * [Developer Guide](https://dev.qgroundcontrol.com/en/)
 * [Discussion/Support](https://docs.qgroundcontrol.com/en/Support/Support.html)
