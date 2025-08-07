@@ -357,6 +357,8 @@ CustomBuild {
     } else {
         RESOURCES += $$PWD/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
     }
+    RESOURCES += $$PWD/custom/custom.qrc
+
 } else {
     DEFINES += QGC_APPLICATION_NAME=\"\\\"QGroundControl\\\"\"
     DEFINES += QGC_ORG_NAME=\"\\\"QGroundControl.org\\\"\"

@@ -8,6 +8,18 @@
  *   @brief Custom QGCCorePlugin Implementation
  *   @author Gus Grubba <gus@auterion.com>
  */
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QTimer>
+#include <QEventLoop>
+#include <QApplication>
+#include <QDebug>
+#include <QtQuick/QQuickWindow>
+#include <QMetaType>
+#include <QVariant>
+#include <QSplashScreen>
+#include <QEventLoop>
+#include <functional>
 
 #include <QtQml>
 #include <QQmlEngine>
@@ -109,22 +121,35 @@ void CustomPlugin::_addSettingsEntry(const QString& title, const char* qmlFile, 
 }
 
 //-----------------------------------------------------------------------------
-QVariantList&
-CustomPlugin::settingsPages()
+
+
+QVariantList& CustomPlugin::settingsPages()
 {
-    if(_customSettingsList.isEmpty()) {
-        _addSettingsEntry(tr("General"),     "qrc:/qml/GeneralSettings.qml",     "qrc:/res/gear-white.svg");
-        _addSettingsEntry(tr("Comm Links"),  "qrc:/qml/LinkSettings.qml",        "qrc:/res/waves.svg");
-        _addSettingsEntry(tr("Offline Maps"),"qrc:/qml/OfflineMap.qml",          "qrc:/res/waves.svg");
-        _addSettingsEntry(tr("MAVLink"),     "qrc:/qml/MavlinkSettings.qml",     "qrc:/res/waves.svg");
-        _addSettingsEntry(tr("Console"),     "qrc:/qml/QGroundControl/Controls/AppMessages.qml");
-#if defined(QT_DEBUG)
-        //-- These are always present on Debug builds
-        _addSettingsEntry(tr("Mock Link"),   "qrc:/qml/MockLink.qml");
-#endif
+    if (_customSettingsList.isEmpty()) {
+        _addSettingsEntry(tr("General"),      "qrc:/qml/GeneralSettings.qml",
+                          "qrc:/res/gear-white.svg");
+        _addSettingsEntry(tr("Comm Links"),   "qrc:/qml/LinkSettings.qml",
+                          "qrc:/res/waves.svg");
+        _addSettingsEntry(tr("Offline Maps"), "qrc:/qml/OfflineMap.qml",
+                          "qrc:/res/waves.svg");
+        _addSettingsEntry(tr("MAVLink"),      "qrc:/qml/MavlinkSettings.qml",
+                          "qrc:/res/waves.svg");
+        _addSettingsEntry(tr("Console"),      "qrc:/qml/QGroundControl/Controls/AppMessages.qml");
+
+    #if defined(QT_DEBUG)
+        _addSettingsEntry(tr("Mock Link"),    "qrc:/qml/MockLink.qml");
+    #endif
+
+        // ----------  visible only for admins ----------
+        if (_currentRole == Role::Admin) {
+            _addSettingsEntry(tr("Firmware"), "qrc:/qml/FirmwareUpgrade.qml",
+                              "qrc:/res/firmware.svg");
+        }
     }
     return _customSettingsList;
 }
+
+
 
 QGCOptions* CustomPlugin::options()
 {
@@ -217,7 +242,7 @@ void CustomPlugin::paletteOverride(QString colorName, QGCPalette::PaletteColorIn
         colorInfo[QGCPalette::Light][QGCPalette::ColorGroupDisabled] = QColor("#9d9d9d");
     }
     else if (colorName == QStringLiteral("buttonHighlight")) {
-        colorInfo[QGCPalette::Dark][QGCPalette::ColorGroupEnabled]   = QColor("#e91c1c");
+        colorInfo[QGCPalette::Dark][QGCPalette::ColorGroupEnabled]   = QColor("#c09403");
         colorInfo[QGCPalette::Dark][QGCPalette::ColorGroupDisabled]  = QColor("#495057");
         colorInfo[QGCPalette::Light][QGCPalette::ColorGroupEnabled]  = QColor("#aeebd0");
         colorInfo[QGCPalette::Light][QGCPalette::ColorGroupDisabled] = QColor("#e4e4e4");
@@ -362,10 +387,114 @@ void CustomPlugin::paletteOverride(QString colorName, QGCPalette::PaletteColorIn
     }
 }
 
-// We override this so we can get access to QQmlApplicationEngine and use it to register our qml module
+void CustomPlugin::setLoggedInUser(const QString& userName)
+{
+Role newRole = (userName.compare("admin", Qt::CaseInsensitive) == 0)
+               ? Role::Admin : Role::User;
+
+    if (newRole != _currentRole)
+    {
+        _currentRole = newRole;
+        _customSettingsList.clear();      // force rebuild of settings list
+    }
+}
+
+//For logout request
+void CustomPlugin::requestLogout()
+{
+    // ask the main window to disappear while we re-authenticate
+    if (auto win = qgcApp()->mainRootWindow())
+        win->setVisible(false);
+
+    _currentRole        = Role::Unknown;   // forget old role
+    _customSettingsList.clear();           // rebuild settings list later
+
+    // Re-run the same dialog you used at start-up
+    QQmlApplicationEngine* engine = qgcApp()->qmlAppEngine();
+    if (showLoginPage(engine)) {           // user logged in again
+        if (auto win = qgcApp()->mainRootWindow())
+            win->setVisible(true);
+    } else {                               // cancelled → quit program
+        qgcApp()->quit();
+    }
+}//For logout request
+
+
 QQmlApplicationEngine* CustomPlugin::createQmlApplicationEngine(QObject* parent)
 {
+    // Show splash screen
+    QPixmap logo(":/custom/img/Splashscreen.png");
+    QSplashScreen* splash = new QSplashScreen(logo);
+    splash->show();
+
+    // Keep splash for 3 seconds
+    QEventLoop loop;
+    QTimer::singleShot(3000, &loop, SLOT(quit()));
+    loop.exec();
+    splash->close();
+    splash->deleteLater();
+
+    // Create QML engine first
     QQmlApplicationEngine* qmlEngine = QGCCorePlugin::createQmlApplicationEngine(parent);
     qmlEngine->addImportPath("qrc:/Custom/Widgets");
+    qmlEngine->rootContext()->setContextProperty("loginManager", this);
+    // Show login page and wait for authentication
+    if (!showLoginPage(qmlEngine)) {
+        // If login failed or was cancelled, exit
+        return nullptr;
+    }
+
     return qmlEngine;
 }
+
+bool CustomPlugin::showLoginPage(QQmlApplicationEngine* engine)
+{
+    // Create a separate window for login
+    QQmlComponent loginComponent(engine, QUrl("qrc:/Custom/Widgets/LoginPage.qml"));
+    if (loginComponent.status() != QQmlComponent::Ready) {
+        qWarning() << "Failed to load login component:" << loginComponent.errorString();
+        return true; // Continue without login if component fails
+    }
+
+    QObject* loginWindow = loginComponent.create();
+    if (!loginWindow) {
+        qWarning() << "Failed to create login window";
+        return true;
+    }
+
+    // Set up login result tracking
+    _loginSuccessful = false;
+    _loginCompleted = false;
+
+    // Connect to login signals using old-style Qt connections
+    connect(loginWindow, SIGNAL(loginSuccessful()), this, SLOT(onLoginSuccessful()));
+    connect(loginWindow, SIGNAL(loginCancelled()), this, SLOT(onLoginCancelled()));
+
+    // Show login window
+    QMetaObject::invokeMethod(loginWindow, "show");
+
+    // Wait for login completion
+    QEventLoop loginLoop;
+    connect(this, SIGNAL(loginCompleted()), &loginLoop, SLOT(quit()));
+    loginLoop.exec();
+
+    // Clean up login window
+    loginWindow->deleteLater();
+
+    return _loginSuccessful;
+}
+
+void CustomPlugin::onLoginSuccessful()
+{
+    _loginSuccessful = true;
+    _loginCompleted = true;
+    emit loginCompleted();
+}
+
+void CustomPlugin::onLoginCancelled()
+{
+    _loginSuccessful = false;
+    _loginCompleted = true;
+    emit loginCompleted();
+}
+

@@ -76,5 +76,33 @@ private:
 
 private:
     CustomOptions*  _options = nullptr;
-    QVariantList    _customSettingsList; // Not to be mixed up with QGCCorePlugin implementation
+    QVariantList    _customSettingsList;
+
+public:
+    // ----------  role handling ----------
+    enum class Role { Unknown, User, Admin };
+    Q_ENUM(Role)
+
+    Q_INVOKABLE void setLoggedInUser(const QString& userName);   // QML will call this
+
+private:
+    Role         _currentRole { Role::Unknown };   // <<< NEW member
+
+public:
+    Q_INVOKABLE void requestLogout();         // QML will call this
+
+public slots:
+    void onLoginSuccessful();
+    void onLoginCancelled();
+
+signals:
+    void loginCompleted();
+
+// In the private section:
+private:
+     bool showLoginPage(QQmlApplicationEngine* engine);
+    void _addSettingsEntry(const QString& title, const QString& qmlFile, const QString& iconFile = QString());
+    bool _loginSuccessful = false;
+    bool _loginCompleted = false;
+
 };

@@ -28,6 +28,20 @@
 #include <QtQml>
 #include <QQmlEngine>
 
+// added method and the below line
+// #include "CustomLogin/LoginHandler.h"
+// #include "QGCCorePlugin.h"
+
+// #include "LoginHandler.h"  // Add this if not already
+
+// QGCCorePlugin::QGCCorePlugin(QGCApplication* app, QGCToolbox* toolbox)
+//     : QGCCorePluginBase(app, toolbox)
+// {
+//     LoginHandler* loginHandler = new LoginHandler(this);
+//     qmlRegisterSingletonInstance("QGroundControl.LoginHandler", 1, 0, "loginHandler", loginHandler);
+// }
+
+
 /// @file
 ///     @brief Core Plugin Interface for QGroundControl - Default Implementation
 ///     @author Gus Grubba <gus@auterion.com>

@@ -23,12 +23,16 @@ DEFINES += GIT_VERSION=\"\\\"$$CUSTOM_QGC_VERSION\\\"\"
 message(Custom QGC Version: $${CUSTOM_QGC_VERSION})
 
 # Build a single flight stack by disabling APM support
-MAVLINK_CONF = common
-CONFIG  += QGC_DISABLE_APM_MAVLINK
-CONFIG  += QGC_DISABLE_APM_PLUGIN QGC_DISABLE_APM_PLUGIN_FACTORY
+MAVLINK_CONF = ardupilotmega
+# CONFIG  += QGC_DISABLE_APM_MAVLINK
+# CONFIG  += QGC_DISABLE_APM_PLUGIN QGC_DISABLE_APM_PLUGIN_FACTORY
+CONFIG += APMFirmwarePlugin
+CONFIG -= QGC_DISABLE_APM_PLUGIN
+CONFIG -= QGC_DISABLE_APM_PLUGIN_FACTORY
+CONFIG -= QGC_DISABLE_APM_MAVLINK
 
 # We implement our own PX4 plugin factory
-CONFIG  += QGC_DISABLE_PX4_PLUGIN_FACTORY
+# CONFIG  += QGC_DISABLE_PX4_PLUGIN_FACTORY
 
 # Branding
 
@@ -71,20 +75,21 @@ HEADERS += \
 INCLUDEPATH += \
     $$PWD/src \
 
+
 #-------------------------------------------------------------------------------------
 # Custom Firmware/AutoPilot Plugin
 
-INCLUDEPATH += \
-    $$PWD/src/FirmwarePlugin \
-    $$PWD/src/AutoPilotPlugin
+# INCLUDEPATH += \
+#     $$PWD/src/FirmwarePlugin \
+#     $$PWD/src/AutoPilotPlugin
 
-HEADERS+= \
-    $$PWD/src/AutoPilotPlugin/CustomAutoPilotPlugin.h \
-    $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.h \
-    $$PWD/src/FirmwarePlugin/CustomFirmwarePluginFactory.h \
+# HEADERS+= \
+#     $$PWD/src/AutoPilotPlugin/CustomAutoPilotPlugin.h \
+#     $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.h \
+#     $$PWD/src/FirmwarePlugin/CustomFirmwarePluginFactory.h \
 
-SOURCES += \
-    $$PWD/src/AutoPilotPlugin/CustomAutoPilotPlugin.cc \
-    $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.cc \
-    $$PWD/src/FirmwarePlugin/CustomFirmwarePluginFactory.cc \
+# SOURCES += \
+#     $$PWD/src/AutoPilotPlugin/CustomAutoPilotPlugin.cc \
+#     $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.cc \
+#     $$PWD/src/FirmwarePlugin/CustomFirmwarePluginFactory.cc \
 
