@@ -1,4 +1,4 @@
-# QGroundControl Ground Control Station
+# Indrones Ground Control Station
 
 [![Releases](https://img.shields.io/github/release/mavlink/QGroundControl.svg)](https://github.com/mavlink/QGroundControl/releases)
 [![Travis Build Status](https://travis-ci.org/mavlink/qgroundcontrol.svg?branch=master)](https://travis-ci.org/mavlink/qgroundcontrol)
@@ -9,24 +9,15 @@
 
 *QGroundControl* (QGC) is an intuitive and powerful ground control station (GCS) for UAVs.
 
-The primary goal of QGC is ease of use for both first time and professional users.
-It provides full flight control and mission planning for any MAVLink enabled drone, and vehicle setup for both PX4 and ArduPilot powered UAVs. Instructions for *using QGroundControl* are provided in the [User Manual](https://docs.qgroundcontrol.com/en/) (you may not need them because the UI is very intuitive!)
-
-
-##Customized Version for Indrones Solutions pvt.Ltd.
-
-This customized version of Qgroundcontrol has been specifically developed for Indrones Solution Private Limited, offering the following features:
+The primary goal of QGC is ease of use for both first time and professional users. It provides full flight control and mission planning for any MAVLink enabled drone, and vehicle setup for both PX4 and ArduPilot powered UAVs. Instructions for using QGroundControl are provided in the User Manual (you may not need them because the UI is very intuitive!)
 
 ✨ Key Custom Features
 
-1.🔐 Secure Authentication
-A secure login mechanism is implemented to ensure that only verified users can access and operate the system, enhancing safety and accountability.
+1.🔐 Secure Authentication A secure login mechanism is implemented to ensure that only verified users can access and operate the system, enhancing safety and accountability.
 
-2.🎨 Custom Branding
-The user interface is customized with Indrones-specific colors, logos, and UI elements to maintain consistent brand identity across all operations.
+2.🎨 Custom Branding The user interface is customized with Indrones-specific colors, logos, and UI elements to maintain consistent brand identity across all operations.
 
-3.🚀 Custom Splash Screen
-A personalized splash screen appears during startup, reflecting the Indrones branding and offering a professional and cohesive user experience.
+3.🚀 Custom Splash Screen A personalized splash screen appears during startup, reflecting the Indrones branding and offering a professional and cohesive user experience.
 
 4.👥 Role-Based Authentication System
 
