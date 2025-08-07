@@ -1,33 +1,26 @@
-# Indrones Ground Control Station
+#Indrones Ground Control Station
+Indrones GCS (GCS) is an intuitive and powerful ground control station for UAVs.
 
-[![Releases](https://img.shields.io/github/release/mavlink/QGroundControl.svg)](https://github.com/mavlink/QGroundControl/releases)
-[![Travis Build Status](https://travis-ci.org/mavlink/qgroundcontrol.svg?branch=master)](https://travis-ci.org/mavlink/qgroundcontrol)
-[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/crxcm4qayejuvh6c/branch/master?svg=true)](https://ci.appveyor.com/project/mavlink/qgroundcontrol)
+This is a customized build of QGroundControl tailored specifically for Indrones Solutions Private Limited, featuring full flight control and mission planning for any MAVLink enabled drone, and vehicle setup for ArduPilot(APM) powered UAVs. Instructions for using Indrones GCS are provided in the Custom User Manual (you may not need them because the UI is very intuitive!)
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mavlink/qgroundcontrol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Key Custom Features
+🔒 Secure Authentication
+Only verified users can access the system, ensuring safe operations.
 
+🎨 Custom Branding
+The UI features Indrones-specific colors, logos, and assets to reflect company identity.
 
-*QGroundControl* (QGC) is an intuitive and powerful ground control station (GCS) for UAVs.
+🚀 Custom Splash Screen
+A personalized splash screen appears on startup to reflect Indrones' branding.
 
-The primary goal of QGC is ease of use for both first time and professional users. It provides full flight control and mission planning for any MAVLink enabled drone, and vehicle setup for both PX4 and ArduPilot powered UAVs. Instructions for using QGroundControl are provided in the User Manual (you may not need them because the UI is very intuitive!)
+👥 Role-Based Login System
 
-✨ Key Custom Features
+Operator Login – For regular drone users with limited access and permissions.
+Engineer/Admin Login – For advanced users with full control and configuration rights.
 
-1.🔐 Secure Authentication A secure login mechanism is implemented to ensure that only verified users can access and operate the system, enhancing safety and accountability.
+_________________________________________________________________________________________________________
 
-2.🎨 Custom Branding The user interface is customized with Indrones-specific colors, logos, and UI elements to maintain consistent brand identity across all operations.
-
-3.🚀 Custom Splash Screen A personalized splash screen appears during startup, reflecting the Indrones branding and offering a professional and cohesive user experience.
-
-4.👥 Role-Based Authentication System
-
-Operator Access – Designed for standard drone operators, offering restricted access to essential functions only.
-
-Engineer/Admin Access – Intended for advanced users or administrators, providing full control over system settings and configurations.
-
-All the code is open-source, so you can contribute and evolve it as you want.
-The [Developer Guide](https://dev.qgroundcontrol.com/en/) explains how to [build](https://dev.qgroundcontrol.com/en/getting_started/) and extend QGC.
-
+Feel free to contribute or explore the source code to extend this customized GCS further!
 
 Key Links:
 * [Website](http://qgroundcontrol.com) (qgroundcontrol.com)
